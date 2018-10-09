@@ -61,15 +61,15 @@ sapply(merged_data, function(x) sum(is.na(x)))
 #### 4.Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
 
 
-TESTESTTEST
-#### 6 Summary statistics for the ABV variable. Summary helps us find the min, mean, median, max.
+
+#### 6. Summary statistics for the ABV variable. Summary helps us find the min, mean, median, max.
 ```{r}
 summary(merged_data[3])
 sapply(merged_data[3], sd, na.rm=TRUE)
 ```
 
 
-#### 7 Is there an apparent relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot.
+#### 7. Is there an apparent relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot.
 
 ```{r}
 ggplot(merged_data, aes(x=ABV, y=IBU)) + geom_point() +geom_smooth(method=lm)
