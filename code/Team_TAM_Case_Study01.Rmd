@@ -61,7 +61,7 @@ sapply(merged_data, function(x) sum(is.na(x)))
 #### 4.Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
 
 
-
+TESTESTTEST
 #### 6 Summary statistics for the ABV variable. Summary helps us find the min, mean, median, max.
 ```{r}
 summary(merged_data[3])
