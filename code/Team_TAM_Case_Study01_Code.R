@@ -30,3 +30,13 @@ head(merged_data,6)
 tail(merged_data,6)
 # Number of NA's in each column
 sapply(merged_data, function(x) sum(is.na(x)))
+
+# Summary statistics of ABV column
+summary(merged_data[3])
+sapply(merged_data[3], sd, na.rm=TRUE)
+      
+# ggplot to create scatter plot with line        
+ggplot(merged_data, aes(x=ABV, y=IBU)) + geom_point() +geom_smooth(method=lm)
+
+# Use Correlation function to determine our correlation of .67 which shows weak proof of correlation.
+cor(merged_data$ABV, merged_data$IBU, use = "complete.obs")
