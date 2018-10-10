@@ -79,9 +79,6 @@ colnames(MedianResults) <- c("State", "Median_ABV", "Median_IBU")
 # MedianResults <- melt(MedianResults, id.vars = c("Median_ABV", "Median_IBU"))
 Plottyplotter <- ggplot(data=MedianResults, aes(x=MedianResults$State, y=MedianResults$Median_ABV, fill=State)) + geom_bar(stat="identity")  + theme_bw()
 
-
-#write.csv(merged_data, file = "Merged.csv", row.names = F)
-
 p <- Plottyplotter + labs(x = "State Abbr", y = "ABV", title = "Summary of ABV \n by State") + theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
 #slowly building our chart
 
@@ -90,8 +87,7 @@ p <- p + theme(axis.text.x = element_text(size = 6,
                                           hjust = 1,
                                           vjust = 1))
 p                                               
-                                                           
-```
+     
 
 #### 5.Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
 
@@ -102,20 +98,17 @@ require(dplyr)
 require(ggplot2)
 
 # Takes the median results and stores the max for each state into a df 
-MedianResults %>% 
-  group_by(MedianResults$State) %>% 
-  summarize(Max_ABV = max(Median_ABV, na.rm = TRUE), Max_IBU = max(Median_IBU, na.rm = TRUE)) -> MaxResults
+merged_data %>% 
+  group_by(merged_data$State) %>% 
+  summarize(Max_ABV = max(ABV, na.rm = TRUE), Max_IBU = max(IBU, na.rm = TRUE)) -> MaxResults
 colnames(MaxResults) <- c("State", "Max_ABV", "Max_IBU")
 
 #Finds maximum of resultant dataset
 MaxResults[which.max(MaxResults$Max_ABV),]
 MaxResults[which.max(MaxResults$Max_IBU),]
 
-#The state with the most alcoholic content is DC.
-#The state with the highest IBU is Maine
-
-```
-
+#The state with the most alcoholic content is Colorado
+#The state with the highest IBU is Oregon.
   
 
 #### 6. Summary statistics for the ABV variable. Summary helps us find the min, mean, median, max.
