@@ -109,9 +109,10 @@ MaxResults[which.max(MaxResults$Max_IBU),]
 
 #The state with the most alcoholic content is Colorado
 #The state with the highest IBU is Oregon.
-  
+```
 
 #### 6. Summary statistics for the ABV variable. Summary helps us find the min, mean, median, max.
+
 ```{r}
 summary(merged_data[3])
 sapply(merged_data[3], sd, na.rm=TRUE)
