@@ -8,7 +8,7 @@ date: "10/6/2018"
 output: html_document
 ---
 
-#TEJ YOU ARE GREAT AND THEN SOME
+#TEJ YOU ARE GREAT AND THEN SOME and Andy too and Martin
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -52,6 +52,7 @@ head(merged_data,6)
 tail(merged_data,6)
 ```
 
+
 #### 3. Report the number of NA's in each column.
 ```{r}
 # Number of NA's in each column
@@ -62,4 +63,66 @@ sapply(merged_data, function(x) sum(is.na(x)))
 #### 4.Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
 
 
+```{r}
 
+require(dplyr)
+require(ggplot2)
+require(reshape2)
+
+
+merged_data %>% 
+  group_by(merged_data$State) %>% 
+  summarize(Median_ABV = median(ABV, na.rm = TRUE), Median_IBU = median(IBU, na.rm = TRUE)) -> MedianResults             
+ 
+colnames(MedianResults) <- c("State", "Median_ABV", "Median_IBU")
+
+# MedianResults <- melt(MedianResults, id.vars = c("Median_ABV", "Median_IBU"))
+Plottyplotter <- ggplot(data=MedianResults, aes(x=MedianResults$State, y=MedianResults$Median_ABV, fill=State)) + geom_bar(stat="identity")  + theme_bw()
+
+p <- Plottyplotter + labs(x = "State Abbr", y = "ABV", title = "Summary of ABV \n by State") + theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
+#slowly building our chart
+
+p <- p + theme(axis.text.x = element_text(size = 6,
+                                          angle =45,
+                                          hjust = 1,
+                                          vjust = 1))
+p                                               
+     
+```
+#### 5.Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
+
+
+```{r}
+
+require(dplyr)
+require(ggplot2)
+
+# Takes the median results and stores the max for each state into a df 
+merged_data %>% 
+  group_by(merged_data$State) %>% 
+  summarize(Max_ABV = max(ABV, na.rm = TRUE), Max_IBU = max(IBU, na.rm = TRUE)) -> MaxResults
+colnames(MaxResults) <- c("State", "Max_ABV", "Max_IBU")
+
+#Finds maximum of resultant dataset
+MaxResults[which.max(MaxResults$Max_ABV),]
+MaxResults[which.max(MaxResults$Max_IBU),]
+
+#The state with the most alcoholic content is Colorado
+#The state with the highest IBU is Oregon.
+```
+
+#### 6. Summary statistics for the ABV variable. Summary helps us find the min, mean, median, max.
+
+```{r}
+summary(merged_data[3])
+sapply(merged_data[3], sd, na.rm=TRUE)
+```
+
+
+#### 7. Is there an apparent relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot.
+
+```{r}
+ggplot(merged_data, aes(x=ABV, y=IBU)) + geom_point() +geom_smooth(method=lm)
+
+# Use Correlation function to determine our correlation of .67 which shows weak proof of correlation.
+cor(merged_data$ABV, merged_data$IBU, use = "complete.obs")
