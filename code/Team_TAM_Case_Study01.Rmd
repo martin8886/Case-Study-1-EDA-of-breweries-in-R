@@ -52,7 +52,7 @@ head(merged_data,6)
 tail(merged_data,6)
 ```
 
- ```  
+
 #### 3. Report the number of NA's in each column.
 ```{r}
 # Number of NA's in each column
