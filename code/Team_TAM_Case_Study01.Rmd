@@ -79,6 +79,11 @@ colnames(MedianResults) <- c("State", "Median_ABV", "Median_IBU")
 # MedianResults <- melt(MedianResults, id.vars = c("Median_ABV", "Median_IBU"))
 Plottyplotter <- ggplot(data=MedianResults, aes(x=MedianResults$State, y=MedianResults$Median_ABV, fill=State)) + geom_bar(stat="identity")  + theme_bw()
 
+Plottyplotter1 <- ggplot(data=MedianResults, aes(x=MedianResults$State, y=MedianResults$Median_IBU, fill=State)) + geom_bar(stat="identity")  + theme_bw()
+
+
+#write.csv(merged_data, file = "Merged.csv", row.names = F)
+
 p <- Plottyplotter + labs(x = "State Abbr", y = "ABV", title = "Summary of ABV \n by State") + theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
 #slowly building our chart
 
@@ -86,8 +91,22 @@ p <- p + theme(axis.text.x = element_text(size = 6,
                                           angle =45,
                                           hjust = 1,
                                           vjust = 1))
-p                                               
-     
+                                               
+      
+b <- Plottyplotter1 + labs(x = "State Abbr", y = "IBU", title = "Summary of IBU \n by State") + theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
+#slowly building our chart
+
+b <- b  + theme(axis.text.x = element_text(size = 6,
+                                          angle =45,
+                                          hjust = 1,
+                                          vjust = 1))
+
+
+p
+b
+
+
+
 ```
 #### 5.Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
 
