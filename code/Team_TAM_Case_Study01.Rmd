@@ -87,7 +87,7 @@ sapply(merged_data, function(x) sum(is.na(x)))
 #### Parsing the dataset for NA values we see that our ABV has a total of 64 NA value's while the ABV column shows 1005 NA values.  It would appear that breweries haven't fully adopted the IBU rating scale for their beers,  This won't give us as complete a picture of the market, but there's not much we can do about that.  
 
 
-#### 4.Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
+#### Question 4: Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
 ```{r}
 
 require(dplyr)
