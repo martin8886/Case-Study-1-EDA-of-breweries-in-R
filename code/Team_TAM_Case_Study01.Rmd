@@ -8,22 +8,27 @@ date: "10/6/2018"
 output: html_document
 ---
 
-#TEJ YOU ARE GREAT AND THEN SOME and Andy too and Martin
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 # MSDS 6306: Doing Data Science
-### Case Study 01
-#### 1. How many breweries are present in each state?
+## Case Study 01
+
+###Question 1: How many breweries are present in each state?
 ```{r}
 # load the library dplyr https://dplyr.tidyverse.org/ 
 library(dplyr)
 # load ggplot2 library
 library(ggplot2)
 # load the data
-beer <- read.csv("../data/Beers.csv", header = TRUE, sep = ",")
-breweries <- read.csv("../data/Breweries.csv", header = TRUE, sep = ",")
+
+fpbeer <- "/Users/andyh/Google Drive/Education/SMU/Courses/401 - Doing Data Science/Case Study 1/CaseStudy1/Beers.csv"
+fpbrew <- "/Users/andyh/Google Drive/Education/SMU/Courses/401 - Doing Data Science/Case Study 1/CaseStudy1/Breweries.csv"
+
+beer <- read.csv(fpbeer, header = TRUE, sep = ",")
+breweries <- read.csv(fpbrew, header = TRUE, sep = ",")
 # Rename "Name" column in brewaries to Brewery
 breweries <- rename(breweries, Brewery = Name)
 # Count breweries per state
@@ -37,11 +42,23 @@ BreweriesPerState <- arrange(BreweriesPerState, desc(Breweries))
 # Display the first 5 
 head(BreweriesPerState,5)
 # Plot the Breweris Per State
-ggplot(BreweriesPerState, aes(x=reorder(State, Breweries), y=(Breweries))) + geom_bar(stat='identity') + coord_flip() + labs(title ="Breweries Per State", x = "State", y = "Number of Breweries")
+f <- ggplot(BreweriesPerState, aes(x=reorder(State, Breweries), y=(Breweries), fill=State)) + geom_bar(stat='identity') + coord_flip() + labs(title ="Breweries Per State", x = "State", y = "Number of Breweries") +theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
+
+f <- f  + theme(axis.text.y = element_text(size = 5,
+                                          hjust = 1,
+                                          vjust = 1))
+f
+
 ```
 
-#### 2. Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.
+
+###Answer 1:
+####Here is our bar chart of breweries by state.  It is to no one's surprise that Colorado is leading the pack, closely trailed by California.  Two states well known for producing vast varieties and quantities of beer.
+
+
+###Question 2. Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.
 ```{r}
+
 # merge the two df's
 # Change the Brewary_ID in the beer df to Brew_ID so we can merge the two df's by Brew_ID
 beer <- rename(beer, Brew_ID = Brewery_id)
@@ -52,65 +69,70 @@ head(merged_data,6)
 tail(merged_data,6)
 ```
 
+###Answer 2:
+####As you can see above, after merging the dataset on the brewery ID field, it sorts it in alphabetical order on brewery name. The first and last 6 values confirm that the beer data was successfully merged as the location data is now available in the merged data frame.
 
-#### 3. Report the number of NA's in each column.
+
+###Question 3: Report the number of NA's in each column.
 ```{r}
 # Number of NA's in each column
 sapply(merged_data, function(x) sum(is.na(x)))
 # There are a total of 64 NA's in ABV column and 1005 in IBU column.
 ```
 
+###Answer 3:
+####Parsing the dataset for NA values we see that our ABV has a total of 64 NA value's while the ABV column shows 1005 NA values.  It would appear that breweries haven't fully adopted the IBU rating scale for their beers,  This won't give us as complete a picture of the market, but there's not much we can do about that.  
+
+
 #### 4.Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
-
-
 ```{r}
 
 require(dplyr)
 require(ggplot2)
 require(reshape2)
 
-
+#First we'd like to merge the data into something we can graph from one frame.  As such, this function inputs the Median results into a new dataframe from the merged dataset.  
 merged_data %>% 
   group_by(merged_data$State) %>% 
   summarize(Median_ABV = median(ABV, na.rm = TRUE), Median_IBU = median(IBU, na.rm = TRUE)) -> MedianResults             
- 
+# Change those column names
 colnames(MedianResults) <- c("State", "Median_ABV", "Median_IBU")
 
-# MedianResults <- melt(MedianResults, id.vars = c("Median_ABV", "Median_IBU"))
+# Using ggplot2 we will now graph the ABV and IBU per state charts.
+#ABV Bar Chart
 Plottyplotter <- ggplot(data=MedianResults, aes(x=MedianResults$State, y=MedianResults$Median_ABV, fill=State)) + geom_bar(stat="identity")  + theme_bw()
-
+#IBU Bar Chart
 Plottyplotter1 <- ggplot(data=MedianResults, aes(x=MedianResults$State, y=MedianResults$Median_IBU, fill=State)) + geom_bar(stat="identity")  + theme_bw()
 
+#change title, labels, and position of title for the ABV chart.
+p <- Plottyplotter + labs(x = "State Abbr", y = "ABV", title = "Summary of Medians \n  ABV by State") + theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
 
-#write.csv(merged_data, file = "Merged.csv", row.names = F)
 
-p <- Plottyplotter + labs(x = "State Abbr", y = "ABV", title = "Summary of ABV \n by State") + theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
-#slowly building our chart
-
+# Tilt the labels on the x axis to be more readable.
 p <- p + theme(axis.text.x = element_text(size = 6,
                                           angle =45,
                                           hjust = 1,
                                           vjust = 1))
-                                               
-      
-b <- Plottyplotter1 + labs(x = "State Abbr", y = "IBU", title = "Summary of IBU \n by State") + theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
-#slowly building our chart
+                                             
+#change title, labels, and position of title for the IBU chart.
+b <- Plottyplotter1 + labs(x = "State Abbr", y = "IBU", title = "Summary of Medians \n  IBU by State") + theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
 
+# Tilt the labels on the x axis to be more readable
 b <- b  + theme(axis.text.x = element_text(size = 6,
                                           angle =45,
                                           hjust = 1,
                                           vjust = 1))
 
-
-p
-b
-
-
+# Show graphs vertically with cowplot!
+require(cowplot)
+plot_grid(p, b, labels = "AUTO", ncol = 1, align = 'v')
 
 ```
-#### 5.Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
 
+###Answer 4:
+####Using the ever useful "pipes" functionality of dyplr, we're able to do a summary on the medians of the data (Wait am i in stats class talking about logged education data?!!)  This gives us a resultant dataframe with all the data we need in order to achieve our desired graphs.  Then using a combination of ggplot2 and cowplot we can get a nice vertical summary of the ABV and IBU medians to compare!  If i were to pick a state that has the highest median alcohol content with the highest median bitter taste.  I might think of traveling to West Virginia!  Moonshine anyone?  Lol. 
 
+###Question 5.Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
 ```{r}
 
 require(dplyr)
@@ -128,20 +150,36 @@ MaxResults[which.max(MaxResults$Max_IBU),]
 
 #The state with the most alcoholic content is Colorado
 #The state with the highest IBU is Oregon.
+#https://community.powerbi.com/t5/Data-Stories-Gallery/Saint-Louis-Beer-BI/m-p/397557
+
 ```
 
-#### 6. Summary statistics for the ABV variable. Summary helps us find the min, mean, median, max.
+###Answer 5:
+####Once again, pipes to the rescue for finding our maximum ABV and IBU in our dataset.  It would appear that if we're looking for the highest alcohol content in our beer, Colorado is the place to go!  Now if we were looking for the most bitter beer available, then Oregon would be the destination of choice.
 
+###Question 6: Summary statistics for the ABV variable. Summary helps us find the min, mean, median, max.
 ```{r}
+
+#Summary Statistics for the ABV variable with NA's removed. 
 summary(merged_data[3])
 sapply(merged_data[3], sd, na.rm=TRUE)
 ```
 
+###Answer 6:
+#### Looking at the table above we can see the values of ABV range from [0.001 - .1238], With a Median of 0.056 ABV, the data shows us a standard deviation of 0.014.
 
-#### 7. Is there an apparent relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot.
+###Question 7: Is there an apparent relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot.
 
 ```{r}
+
+
 ggplot(merged_data, aes(x=ABV, y=IBU)) + geom_point() +geom_smooth(method=lm)
 
 # Use Correlation function to determine our correlation of .67 which shows weak proof of correlation.
 cor(merged_data$ABV, merged_data$IBU, use = "complete.obs")
+cor(merged_data[,3:4], use = "complete.obs")
+
+```
+
+###Answer 7:
+#### You can see from the plot above that there is a slight correlation of ABV to IBU.  A low p value and R correlation of 0.67 tells us we should target a mildly bitter beer to best mirror the clusting of the scatterplot.
