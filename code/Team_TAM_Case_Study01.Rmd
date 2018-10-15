@@ -54,7 +54,7 @@ f
 
 ###Answer 1:
 
-####Here is our bar chart of breweries by state.  It is to no one's surprise that Colorado is leading the pack, closely trailed by California.  Two states well known for producing vast varieties and quantities of beer.
+#### Here is our bar chart of breweries by state.  It is to no one's surprise that Colorado is leading the pack, closely trailed by California.  Two states well known for producing vast varieties and quantities of beer.
 
 
 ###Question 2. Merge beer data with the breweries data. Print the first 6 observations and the last six observations to check the merged file.
@@ -72,7 +72,7 @@ tail(merged_data,6)
 
 ###Answer 2:
 
-####As you can see above, after merging the dataset on the brewery ID field, it sorts it in alphabetical order on brewery name. The first and last 6 values confirm that the beer data was successfully merged as the location data is now available in the merged data frame.
+#### As you can see above, after merging the dataset on the brewery ID field, it sorts it in alphabetical order on brewery name. The first and last 6 values confirm that the beer data was successfully merged as the location data is now available in the merged data frame.
 
 
 ###Question 3: Report the number of NA's in each column.
@@ -84,7 +84,7 @@ sapply(merged_data, function(x) sum(is.na(x)))
 
 ###Answer 3:
 
-####Parsing the dataset for NA values we see that our ABV has a total of 64 NA value's while the ABV column shows 1005 NA values.  It would appear that breweries haven't fully adopted the IBU rating scale for their beers,  This won't give us as complete a picture of the market, but there's not much we can do about that.  
+#### Parsing the dataset for NA values we see that our ABV has a total of 64 NA value's while the ABV column shows 1005 NA values.  It would appear that breweries haven't fully adopted the IBU rating scale for their beers,  This won't give us as complete a picture of the market, but there's not much we can do about that.  
 
 
 #### 4.Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
@@ -134,7 +134,7 @@ plot_grid(p, b, labels = "AUTO", ncol = 1, align = 'v')
 
 ###Answer 4:
 
-####Using the ever useful "pipes" functionality of dyplr, we're able to do a summary on the medians of the data (Wait am i in stats class talking about logged education data?!!)  This gives us a resultant dataframe with all the data we need in order to achieve our desired graphs.  Then using a combination of ggplot2 and cowplot we can get a nice vertical summary of the ABV and IBU medians to compare!  If i were to pick a state that has the highest median alcohol content with the highest median bitter taste.  I might think of traveling to West Virginia!  Moonshine anyone?  Lol. 
+#### Using the ever useful "pipes" functionality of dyplr, we're able to do a summary on the medians of the data (Wait am i in stats class talking about logged education data?!!)  This gives us a resultant dataframe with all the data we need in order to achieve our desired graphs.  Then using a combination of ggplot2 and cowplot we can get a nice vertical summary of the ABV and IBU medians to compare!  If i were to pick a state that has the highest median alcohol content with the highest median bitter taste.  I might think of traveling to West Virginia!  Moonshine anyone?  Lol. 
 
 ###Question 5.Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
 ```{r}
@@ -160,7 +160,7 @@ MaxResults[which.max(MaxResults$Max_IBU),]
 
 ###Answer 5:
 
-####Once again, pipes to the rescue for finding our maximum ABV and IBU in our dataset.  It would appear that if we're looking for the highest alcohol content in our beer, Colorado is the place to go!  Now if we were looking for the most bitter beer available, then Oregon would be the destination of choice.
+#### Once again, pipes to the rescue for finding our maximum ABV and IBU in our dataset.  It would appear that if we're looking for the highest alcohol content in our beer, Colorado is the place to go!  Now if we were looking for the most bitter beer available, then Oregon would be the destination of choice.
 
 ###Question 6: Summary statistics for the ABV variable. Summary helps us find the min, mean, median, max.
 ```{r}
